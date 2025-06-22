@@ -28,6 +28,7 @@ document.getElementById("app").innerHTML = `
     <div class="controls">
       <button id="startBtn">Iniciar Juego</button>
       <div id="score">Puntaje: <span >0</span></div>
+      <div id="timer">Tiempo: <span id="time">02:00</span></div>
     </div>
     <div id="gameBoard" class="board"></div>
   </main>
@@ -35,15 +36,23 @@ document.getElementById("app").innerHTML = `
   <footer>
     <p>&copy; 2025 - Card Matching Game| Creado FSJ29</p>
   </footer>
-
+  <audio id="bg-music" src="./fondo.mp3" loop></audio>
   <dialog id="app-dialog"></dialog>
-`;
+`
+const timeSpan = document.getElementById("time");
+;
 
 // Variables globales
 let cards = [];
 let flippedCards = [];
 let lockBoard = false;
 let score = 0;
+const totalPairs = CARDS_ICONS.length; //Total de puntos
+let gameOver = false; // Nueva bandera para evitar mensajes dobles
+//tiempo
+let timerInterval;
+let timeLeft = 120; // 2 minutos en segundos
+
 
 // Elementos capturados del DOM
 const gameBoard = document.getElementById("gameBoard");
@@ -57,6 +66,33 @@ const dialog = document.getElementById("app-dialog");
 
 // Eventos de los botones
 startBtn.addEventListener("click", startGame);
+//funcion de tiempo
+function startTimer() {
+  timeLeft = 120; // Reiniciar el tiempo
+  updateTimerDisplay(); // Mostrar 02:00
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+
+    if (timeLeft <= 0 && !gameOver) {
+      clearInterval(timerInterval);
+      lockBoard = true;
+      gameOver = true;
+      document.getElementById("bg-music").pause();
+      showDialog("🎮GAME OVER❌", "⏰ ¡Tiempo agotado!, Intenta nuevamente");
+      
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(timeLeft / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (timeLeft % 60).toString().padStart(2, "0");
+  timeSpan.textContent = `${minutes}:${seconds}`;
+}
 
 // Funcion que Crea las tarjetas y las mezcla
 function createCards() {
@@ -115,6 +151,14 @@ function checkMatch() {
       card2.classList.add("matched");
       score++;
       scoreSpan.textContent = score;
+    // ✅ Verificamos si ganó
+    if (score === totalPairs && !gameOver) {
+        gameOver = true;
+        clearInterval(timerInterval); // Detenemos el cronómetro
+        document.getElementById("bg-music").pause();//detener uusica
+        showDialog("🎉 ¡Felicidades!", "<p>Has encontrado todos los pares. ¡Ganaste!</p>");
+        
+    }
     } else {
       card1.classList.remove("flipped");
       card2.classList.remove("flipped");
@@ -126,11 +170,18 @@ function checkMatch() {
 
 // Funcion que inicia el juego, crea las tarjetas y muestra las cartas por un tiempo breve
 function startGame() {
+  clearInterval(timerInterval);
   createCards();
   score = 0;
+  scoreSpan.textContent = score;
 
   flippedCards = [];
   lockBoard = true;
+    gameOver = false; // Reiniciamos bandera
+  startTimer(); // <== INICIAMOS EL TEMPORIZADOR
+  const bgMusic = document.getElementById("bg-music");
+ bgMusic.volume = 0.3; // volumen del 0.0 al 1.0
+ bgMusic.play().catch(e => console.warn("Autoplay bloqueado: ", e));
 
   // Mostramos los logos por un breve tiempo
   setTimeout(() => {

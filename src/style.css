@@ -207,16 +207,18 @@ footer {
 }
 
 #app-dialog[open] {
-  max-width: 90vw;
-  height: fit-content;
-  margin: auto auto;
+  width: 100%;
+  max-width: 40rem;
+  padding: 2rem;
+  margin: auto;
   border: none;
   color: var(--color-primary);
   background-color: var(--color-background);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 #app-dialog[open]::backdrop {
@@ -224,11 +226,12 @@ footer {
 }
 
 .dialog-content {
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  text-align: left;
+  text-align: center;
+  width: 100%;
 }
 
 .dialog-header {
@@ -266,6 +269,6 @@ footer {
   }
 
   .app-title {
-    text-align: left;
+    text-align: center;
   }
 }
