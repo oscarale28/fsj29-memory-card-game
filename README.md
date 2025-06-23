@@ -10,6 +10,11 @@ Un juego de memoria con cartas desarrollado con tecnologías web modernas. Los j
 - **CSS** - Estilos y diseño del juego
 - **GitHub Actions** - CI/CD para despliegue automático en GitHub Pages
 
+## 👥 Equipo de desarrollo
+- Humberto Contreras
+- Oscar Orellana
+- Alexander Vásquez
+
 ## 🚀 Instalación y Ejecución
 
 ### Prerrequisitos
@@ -59,7 +64,6 @@ memory-card-game/
     └── workflows/
         └── deploy.yml   # CI/CD para GitHub Pages
 ├── public/
-│   └── vite.svg
 ├── src/
     ├── consts.js        # Constantes de utilidad
 │   ├── main.js          # Punto de entrada principal
